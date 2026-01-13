@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Homeworks/EF/src/PromoCodeFactory.WebHost/app.db
+/Homeworks/EF/src/PromoCodeFactory.WebHost/app.db-shm
+/Homeworks/EF/src/PromoCodeFactory.WebHost/app.db-wal
