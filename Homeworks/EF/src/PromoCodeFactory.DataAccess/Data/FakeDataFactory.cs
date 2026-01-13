@@ -16,7 +16,7 @@ namespace PromoCodeFactory.DataAccess.Data
                 Email = "owner@somemail.ru",
                 FirstName = "Иван",
                 LastName = "Сергеев",
-                Role = Roles.FirstOrDefault(x => x.Name == "Admin"),
+                RoleId = Roles.FirstOrDefault(x => x.Name == "Admin").Id,
                 AppliedPromocodesCount = 5
             },
             new Employee()
@@ -25,7 +25,7 @@ namespace PromoCodeFactory.DataAccess.Data
                 Email = "andreev@somemail.ru",
                 FirstName = "Петр",
                 LastName = "Андреев",
-                Role = Roles.FirstOrDefault(x => x.Name == "PartnerManager"),
+                RoleId = Roles.FirstOrDefault(x => x.Name == "PartnerManager").Id,
                 AppliedPromocodesCount = 10
             },
         };
@@ -85,5 +85,35 @@ namespace PromoCodeFactory.DataAccess.Data
                 return customers;
             }
         }
+
+        public static IEnumerable<PromoCode> PromoCodes =>
+        [
+            new PromoCode()
+            {
+                Id = Guid.Parse("b75389a4-1c6c-483f-924e-6079525a3c1e"),
+                Code = "THEATRE2024",
+                ServiceInfo = "Скидка на театральные билеты",
+                BeginDate = new DateTime(2026, 01, 01),
+                EndDate = new DateTime(2026, 02, 01),
+                PartnerName = "Большой театр",
+                PreferenceId = Preferences.First(x => x.Name == "Театр").Id,
+                PartnerManagerId = Employees.First(x => x.LastName == "Андреев").Id,
+                CustomerId = Customers.First().Id
+            }
+        ];
+
+        public static IEnumerable<CustomerPreference> CustomerPreferences =>
+        [
+            new CustomerPreference()
+            {
+                CustomerId = Customers.First().Id,
+                PreferenceId = Preferences.First(x => x.Name == "Театр").Id
+            },
+            new CustomerPreference()
+            {
+                CustomerId = Customers.First().Id,
+                PreferenceId = Preferences.First(x => x.Name == "Семья").Id
+            }
+        ];
     }
 }
