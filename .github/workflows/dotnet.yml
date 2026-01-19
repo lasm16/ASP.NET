@@ -11,28 +11,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout репозитория
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Debug: показать структуру репозитория
+      - name: Show repository tree
+        run: |
+          pwd
+          ls -R
+
+      # 3️⃣ Setup .NET SDK 8
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
 
+      # 4️⃣ Restore dependencies
       - name: Restore dependencies
-        run: dotnet restore "./ASP.NET/Homeworks/UnitTests/src/PromoCodeFactory.sln"
+        run: dotnet restore
+        working-directory: ASP.NET/Homeworks/UnitTests/src
 
+      # 5️⃣ Build solution
       - name: Build solution
-        run: dotnet build "./ASP.NET/Homeworks/UnitTests/src/PromoCodeFactory.sln" --configuration Release --no-restore
+        run: dotnet build --configuration Release --no-restore
+        working-directory: ASP.NET/Homeworks/UnitTests/src
 
+      # 6️⃣ Run tests с кодовым покрытием
       - name: Run tests
         run: |
-          dotnet test "./ASP.NET/Homeworks/UnitTests/src/PromoCodeFactory.sln" \
-            --no-build \
-            --configuration Release \
+          dotnet test --no-build --configuration Release \
             --collect:"XPlat Code Coverage" \
             --logger "trx;LogFileName=test_results.trx"
+        working-directory: ASP.NET/Homeworks/UnitTests/src
 
+      # 7️⃣ Upload test results
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
