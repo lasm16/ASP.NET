@@ -1,21 +1,32 @@
-image: docker:stable
+stages:
+  - test
+  - build
 
-services:
-  - docker:dind
-
-before_script:
-  - docker info
+test:
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  stage: test
+  script:
+    - dotnet restore
+    - dotnet build --configuration Release
+    - dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage"
+  artifacts:
+    paths:
+      - "**/TestResults/*.trx"
+      - "**/coverage.cobertura.xml"
+    expire_in: 1 week
 
 build:
-  only:
-    - master
-  before_script:
-    - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
+  image: docker:stable
+  services:
+    - docker:dind
+  stage: build
   script:
+    - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest src
     - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
   after_script:
     - docker logout ${CI_REGISTRY}
-  stage: build
-  tags: 
+  only:
+    - master
+  tags:
     - docker
