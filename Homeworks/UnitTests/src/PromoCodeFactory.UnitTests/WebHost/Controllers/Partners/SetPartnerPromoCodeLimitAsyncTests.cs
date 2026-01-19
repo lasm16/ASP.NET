@@ -75,6 +75,7 @@ namespace PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             // Assert
             partner.PartnerLimits.Should().HaveCount(2);
 
+
             _partnersRepositoryMock.Verify(
                 x => x.UpdateAsync(partner),
                 Times.Once);
