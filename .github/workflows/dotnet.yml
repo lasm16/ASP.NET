@@ -27,12 +27,12 @@ jobs:
 
       # 4️⃣ Сборка решения
       - name: Build solution
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ./PromoCodeFactory.sln --configuration Release --no-restore
 
       # 5️⃣ Прогон всех Unit-тестов с покрытием
       - name: Run tests
         run: |
-          dotnet test \
+          dotnet test ./PromoCodeFactory.sln \
             --no-build \
             --configuration Release \
             --collect:"XPlat Code Coverage" \
