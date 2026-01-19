@@ -11,42 +11,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Забираем репозиторий
+      # Checkout репозитория
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Устанавливаем .NET 8 SDK
+      # Setup .NET SDK 8
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
 
-      # 3️⃣ Восстановление пакетов NuGet
+      # Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
+        working-directory: Homeworks/UnitTests/src
 
-      # 4️⃣ Сборка решения
+      # Build solution
       - name: Build solution
         run: dotnet build --configuration Release --no-restore
+        working-directory: Homeworks/UnitTests/src
 
-      # 5️⃣ Прогон всех Unit-тестов с покрытием
+      # Run tests с кодовым покрытием
       - name: Run tests
         run: |
-          dotnet test \
-            --no-build \
-            --configuration Release \
+          dotnet test --no-build --configuration Release \
             --collect:"XPlat Code Coverage" \
             --logger "trx;LogFileName=test_results.trx"
+        working-directory: Homeworks/UnitTests/src
 
-      # 6️⃣ Публикация артефактов тестов (новая версия v4)
+      # Upload test results
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: '**/TestResults/*.trx'
-
-      # 7️⃣ (Опционально) Публикация покрытия на Codecov
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }} # если используешь Codecov
