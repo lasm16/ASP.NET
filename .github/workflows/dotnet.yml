@@ -2,9 +2,9 @@ name: .NET CI
 
 on:
   push:
-    branches: [ hw3.Lyubimov ]
+    branches: [ main ]
   pull_request:
-    branches: [ hw3.Lyubimov ]
+    branches: [ main ]
 
 jobs:
   build-and-test:
