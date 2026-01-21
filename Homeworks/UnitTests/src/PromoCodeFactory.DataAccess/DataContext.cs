@@ -18,12 +18,7 @@ namespace PromoCodeFactory.DataAccess
         public DbSet<Employee> Employees { get; set; }
         
         public DbSet<Partner> Partners { get; set; }
-
-        public DataContext()
-        {
-            
-        }
-        
+       
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
