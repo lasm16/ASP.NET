@@ -48,13 +48,6 @@ jobs:
         run: dotnet build --configuration Release --no-restore
         working-directory: Homeworks/UnitTests/src
 
-      # Apply EF Core migrations (создание базы)
-      - name: Apply EF Core migrations
-        run: dotnet ef database update
-        working-directory: Homeworks/UnitTests/src
-        env:
-          ConnectionStrings__DefaultConnection: ${{ job.env.ConnectionStrings__DefaultConnection }}
-
       # Run tests с кодовым покрытием
       - name: Run tests
         run: |
@@ -62,8 +55,6 @@ jobs:
             --collect:"XPlat Code Coverage" \
             --logger "trx;LogFileName=test_results.trx"
         working-directory: Homeworks/UnitTests/src
-        env:
-          ConnectionStrings__DefaultConnection: ${{ job.env.ConnectionStrings__DefaultConnection }}
 
       # Upload test results
       - name: Upload test results
