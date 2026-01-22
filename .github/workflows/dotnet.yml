@@ -2,13 +2,30 @@ name: .NET CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ hw4 ]
   pull_request:
-    branches: [ main ]
+    branches: [ hw4 ]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=promocode_factory_db;Username=postgres;Password=docker"
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: promocode_factory_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       # Checkout репозитория
